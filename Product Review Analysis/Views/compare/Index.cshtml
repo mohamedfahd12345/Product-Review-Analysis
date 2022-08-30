@@ -1,0 +1,67 @@
+﻿@model List<Product>
+@{
+    var db = new ProductReviewAnalysisContext();
+    var cat_name1 = db.Categories.Where(x => x.Id == Model[0].CategoryId).FirstOrDefault();
+    var cat_name2 = db.Categories.Where(x => x.Id == Model[1].CategoryId).FirstOrDefault();
+    //////////////////---------------Calculate RATE 1-----------------------------/////////////////////////
+    var list_rate1=db.Rateings.Where(x=>x.ProductId==Model[0].Id).ToList();
+
+    double sum1 = 0;
+    foreach(var s in list_rate1)
+    {
+        sum1 += (double)s.Rate;
+    }
+    var avr_rate1 = sum1/list_rate1.Count;
+    //////////////////---------------Calculate RATE 2-----------------------------/////////////////////////
+    var list_rate2=db.Rateings.Where(x=>x.ProductId==Model[1].Id).ToList();
+
+    double sum2 = 0;
+    foreach(var s in list_rate2)
+    {
+        sum2 += (double)s.Rate;
+    }
+    var avr_rate2 = sum2/list_rate2.Count;
+
+}
+<table class="table">
+                <tr>
+                         <th>.</th>
+                        <th>@Model[0].Name</th>
+                        <th>@Model[1].Name</th>
+                       
+                </tr>
+               
+                   
+                        <tr>
+                                <td>Photo</td>
+                                <td>@Model[0].Photo</td>
+                                 <td>@Model[1].Photo</td>
+                        </tr>
+                        <tr>
+                              
+                                <td>Price</td>
+                                <td>@Model[0].Price $</td>
+                                 <td>@Model[1].Price $</td>
+                        </tr>
+
+                        <tr>
+                              
+                                <td>Descripition</td>
+                                <td>@Model[0].Description</td>
+                                 <td>@Model[1].Description</td>
+                        </tr>
+                         <tr>
+                              
+                                <td>Category</td>
+                                <td>@cat_name1.Name</td>
+                                <td>@cat_name2.Name</td>
+                        </tr>
+
+                         <tr>
+                              
+                                <td>RATE</td>
+                                <td>@avr_rate1</td>
+                                <td>@avr_rate2</td>
+                        </tr>
+                
+        </table>

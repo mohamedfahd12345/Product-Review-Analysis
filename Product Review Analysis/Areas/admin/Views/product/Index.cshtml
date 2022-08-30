@@ -1,0 +1,59 @@
+﻿@model Product
+<section class="hero-section">
+	    <div class="container">
+		    <div class="row">
+			    <div class="col-12 col-md-7 pt-5 mb-5 align-self-center">
+				    <div class="promo pe-md-3 pe-lg-5">
+						  <div class="carousel-inner">
+								    <div class="carousel-item active">
+								       
+								        <div class="source row gx-md-3 gy-3 gy-md-0 align-items-center">
+									        <div class="photop" >
+									            <img class="source-profile" src="@Model.Photo" alt="image" >
+									        </div><!--//col-->
+					    <h1 class="headline mb-3">
+						    @Model.Name
+					    </h1><!--//headline-->
+					    <div class="subheadline mb-4">
+						  @Model.Description
+						    
+					    </div><!--//subheading-->
+					    <div>
+							<h3>
+								price:@Model.Price
+							</h3>
+							
+							
+							
+						</div>
+					     <div class="col-12 col-md-auto">
+						        <a class="btn btn-secondary scrollto w-100" href="/admin/product/Edit/@Model.Id">Edit</a>
+						    </div>
+							<div class="col-12 col-md-auto">
+						        <a class="btn btn-secondary scrollto w-100" href="/admin/product/Delete/@Model.Id">Delete</a>
+						    </div>
+					    </div><!--//cta-holder-->
+							  
+							  
+							
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<style>
+	.container{
+	
+  /*border: 1px solid #c3c3c3;*/
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  margin:0px 0px 0px 100px
+	}
+	.photop{
+		width:100%;
+		
+		margin:30px 30px 70px 30px
+	}
+</style>

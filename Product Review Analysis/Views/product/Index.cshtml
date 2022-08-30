@@ -1,0 +1,123 @@
+﻿@model Product
+@{
+	///////////////---------------Calculate RATE-----------------------------/////////////////////////
+	var db = new ProductReviewAnalysisContext();
+	var list_rate=db.Rateings.Where(x=>x.ProductId==Model.Id).ToList();
+
+	double sum = 0;
+	foreach(var s in list_rate)
+	{
+		sum += (double)s.Rate;
+	}
+	var avr_rate = sum/list_rate.Count;
+	///////////////---------------IS USER RATE BEFORE OR NO-----------------------------/////////////////////////
+	var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+	var find_rate_user = db.Rateings.Where(x => x.UserId == userId && x.ProductId == Model.Id).FirstOrDefault();
+
+	///////////////------------------------------COMMENTS----------------------------/////////////////////////
+	
+	var list_comments=db.Comments.Where(x=>x.ProductId==Model.Id).ToList();
+
+
+}
+<section class="hero-section">
+	    <div class="container">
+		    <div class="row">
+			    <div class="col-12 col-md-7 pt-5 mb-5 align-self-center">
+				    <div class="promo pe-md-3 pe-lg-5">
+						  <div class="carousel-inner">
+								    <div class="carousel-item active">
+								       
+								        <div class="source row gx-md-3 gy-3 gy-md-0 align-items-center">
+									        <div class="photop" >
+									            <img class="source-profile" src="@Model.Photo" alt="image" >
+									        </div><!--//col-->
+					    <h1 class="headline mb-3">
+						    @Model.Name
+					    </h1><!--//headline-->
+						<h2>Rate : @avr_rate</h2>
+					    <div class="subheadline mb-4">
+						  @Model.Description
+						    
+					    </div><!--//subheading-->
+					    <div>
+							<h3>
+								price:@Model.Price
+							</h3>
+						</div>
+								@if (find_rate_user == null)
+								{
+									<form asp-controller="Rate" asp-action="index">
+										<input type="hidden" asp-for="Id" />
+										<div class="form-group">
+											<label asp-for="Price" class="control-label">Add RATE</label>
+											<input type="number" min=1 max=5  step="any" asp-for="Price" value="" placeholder="ADD RATE" class="form-control" />
+											<span asp-validation-for="Price" class="text-danger"></span>
+										</div>
+										 <div class="form-group">
+											<input type="submit" value="Add" class="btn btn-primary" />
+										</div>
+									</form>
+								}
+								
+					    </div><!--//cta-holder-->
+						<br/>			
+						<div>
+								 <a href="/compare/index/@Model.Id" class="btn btn-primary">Add TO COMARE</a>
+						</div> 
+						<br/>
+						<hr/>
+
+	@*/////////////////////---------------------ADD COMMENTS---------------------------////////////////////////////////////	*@				
+						<div>
+							@if (find_rate_user != null)
+								{
+									<form asp-controller="comment" asp-action="index">
+										<input type="hidden" asp-for="Id" />
+										<div class="form-group">
+											<label asp-for="Description" class="control-label">Add Comment:</label>
+											<input type="text"  asp-for="Description" value="" placeholder="ADD Comment" class="form-control" />
+											<span asp-validation-for="Description" class="text-danger"></span>
+										</div>
+										 <div class="form-group">
+											<input type="submit" value="Add" class="btn btn-primary" />
+										</div>
+									</form>
+								}
+						</div>
+@*////////////////////////////-----------------------VIEW COMMENTS-------------------------------/////////////////////////////////////////*@
+						<br/>
+						<h1>COMMENTS </h1>
+						<hr />
+						<div>
+							@foreach(var one_comment in list_comments){
+									var user_comment = db.Users.Where(x => x.Id == one_comment.UserId).FirstOrDefault();
+									var rate_by_user = db.Rateings.Where(x => x.UserId == user_comment.Id && x.ProductId == Model.Id).FirstOrDefault();
+									<h3>ADD BY:@user_comment.Email</h3>
+									<h3>RATE: @rate_by_user.Rate</h3>
+									<h4>@one_comment.Descripition</h4>
+									<hr/>
+								}
+						</div>
+							
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<style>
+	.container{
+	
+  /*border: 1px solid #c3c3c3;*/
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  margin:0px 0px 0px 100px
+	}
+	.photop{
+		width:100%;
+		
+		margin:30px 30px 70px 30px
+	}
+</style>
