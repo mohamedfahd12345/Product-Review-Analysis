@@ -1,4 +1,17 @@
 ﻿@model Product
+@{
+	var db = new ProductReviewAnalysisContext();
+	var list_rate=db.Rateings.Where(x=>x.ProductId==Model.Id).ToList();
+
+	double sum = 0;
+	foreach(var s in list_rate)
+	{
+		sum += (double)s.Rate;
+	}
+	var avr_rate = sum/list_rate.Count;
+	///////////////------------------------------COMMENTS----------------------------/////////////////////////
+	var list_comments=db.Comments.Where(x=>x.ProductId==Model.Id).ToList();
+}
 <section class="hero-section">
 	    <div class="container">
 		    <div class="row">
@@ -18,6 +31,7 @@
 						  @Model.Description
 						    
 					    </div><!--//subheading-->
+						<h2>Rate : @avr_rate</h2>
 					    <div>
 							<h3>
 								price:@Model.Price
@@ -40,6 +54,20 @@
 </div>
 </div>
 </div>
+@*////////////////////////////-----------------------VIEW COMMENTS-------------------------------/////////////////////////////////////////*@
+						<br/>
+						<h1>COMMENTS </h1>
+						<hr />
+						<div>
+							@foreach(var one_comment in list_comments){
+									var user_comment = db.Users.Where(x => x.Id == one_comment.UserId).FirstOrDefault();
+									var rate_by_user = db.Rateings.Where(x => x.UserId == user_comment.Id && x.ProductId == Model.Id).FirstOrDefault();
+									<h3>ADD BY:@user_comment.Email</h3>
+									<h3>RATE: @rate_by_user.Rate</h3>
+									<h4>@one_comment.Descripition</h4>
+									<hr/>
+								}
+						</div>
 </section>
 
 <style>
